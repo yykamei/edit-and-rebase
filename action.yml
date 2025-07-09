@@ -3,10 +3,6 @@ description: |
   GitHub Action that lets developers edit the commit messages,
   squash them into a single commit, and rebase it on top of the default branch.
 
-outputs:
-  time: # id of output
-    description: The time we greeted you
-
 runs:
   using: node20
   main: dist/index.js
