@@ -6,7 +6,8 @@
 	"scripts": {
 		"build": "rollup -c",
 		"check": "biome check",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"check:ci": "biome ci",
+		"test": "vitest"
 	},
 	"keywords": [],
 	"author": "Yutaka Kamei",
