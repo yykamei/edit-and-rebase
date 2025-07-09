@@ -1751,7 +1751,7 @@ function requireTimers () {
 	return timers;
 }
 
-var main = {exports: {}};
+var main$1 = {exports: {}};
 
 var sbmh;
 var hasRequiredSbmh;
@@ -3289,7 +3289,7 @@ function requireUrlencoded () {
 var hasRequiredMain;
 
 function requireMain () {
-	if (hasRequiredMain) return main.exports;
+	if (hasRequiredMain) return main$1.exports;
 	hasRequiredMain = 1;
 
 	const WritableStream = require$$0$7.Writable;
@@ -3370,12 +3370,12 @@ function requireMain () {
 	  this._parser.write(chunk, cb);
 	};
 
-	main.exports = Busboy;
-	main.exports.default = Busboy;
-	main.exports.Busboy = Busboy;
+	main$1.exports = Busboy;
+	main$1.exports.default = Busboy;
+	main$1.exports.Busboy = Busboy;
 
-	main.exports.Dicer = Dicer;
-	return main.exports;
+	main$1.exports.Dicer = Dicer;
+	return main$1.exports;
 }
 
 var constants$3;
@@ -31234,10 +31234,34 @@ function requireGithub () {
 
 var githubExports = requireGithub();
 
+function main() {
+    // Check if this is an issue comment event
+    if (githubExports.context.eventName !== 'issue_comment') {
+        coreExports.info('Not an issue comment event, exiting');
+        return;
+    }
+
+    // Get the comment body from the payload
+    const comment = githubExports.context.payload.comment;
+    if (!comment || !comment.body) {
+        coreExports.info('No comment body found, exiting');
+        return;
+    }
+
+    const commentBody = comment.body;
+    
+    // Check if comment starts with .rebase
+    if (!commentBody.startsWith('.rebase')) {
+        coreExports.info('Comment does not start with .rebase, exiting');
+        return;
+    }
+
+    // Log the whole comment
+    coreExports.info(`Rebase comment received: ${commentBody}`);
+}
+
 try {
-    coreExports.info("Hello");
-    const payload = JSON.stringify(githubExports.context.payload, undefined, 2);
-    coreExports.info(`The event payload: ${payload}`);
+    main();
 } catch (error) {
     coreExports.setFailed(error.message);
 }
