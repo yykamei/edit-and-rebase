@@ -1,0 +1,13 @@
+{
+  "name": "edit-and-rebase",
+  "version": "0.1.0",
+  "description": "This is a GitHub Action that let developers edit the commit messages, squash them into a single commit, and rebase it on top of the default branch.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Yutaka Kamei",
+  "license": "MIT",
+  "type": "module"
+}
