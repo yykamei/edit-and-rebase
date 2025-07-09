@@ -2,7 +2,7 @@ import * as core from "@actions/core";
 import { main } from "./main";
 
 try {
-    main();
+	main();
 } catch (error) {
-    core.setFailed(error.message);
+	core.setFailed(error.message);
 }
