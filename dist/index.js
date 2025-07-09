@@ -31235,34 +31235,34 @@ function requireGithub () {
 var githubExports = requireGithub();
 
 function main() {
-    // Check if this is an issue comment event
-    if (githubExports.context.eventName !== 'issue_comment') {
-        coreExports.info('Not an issue comment event, exiting');
-        return;
-    }
+	// Check if this is an issue comment event
+	if (githubExports.context.eventName !== "issue_comment") {
+		coreExports.info("Not an issue comment event, exiting");
+		return;
+	}
 
-    // Get the comment body from the payload
-    const comment = githubExports.context.payload.comment;
-    if (!comment || !comment.body) {
-        coreExports.info('No comment body found, exiting');
-        return;
-    }
+	// Get the comment body from the payload
+	const comment = githubExports.context.payload.comment;
+	if (!comment || !comment.body) {
+		coreExports.info("No comment body found, exiting");
+		return;
+	}
 
-    const commentBody = comment.body;
-    
-    // Check if comment starts with .rebase
-    if (!commentBody.startsWith('.rebase')) {
-        coreExports.info('Comment does not start with .rebase, exiting');
-        return;
-    }
+	const commentBody = comment.body;
 
-    // Log the whole comment
-    coreExports.info(`Rebase comment received: ${commentBody}`);
+	// Check if comment starts with .rebase
+	if (!commentBody.startsWith(".rebase")) {
+		coreExports.info("Comment does not start with .rebase, exiting");
+		return;
+	}
+
+	// Log the whole comment
+	coreExports.info(`Rebase comment received: ${commentBody}`);
 }
 
 try {
-    main();
+	main();
 } catch (error) {
-    coreExports.setFailed(error.message);
+	coreExports.setFailed(error.message);
 }
 //# sourceMappingURL=index.js.map
