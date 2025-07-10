@@ -8,6 +8,13 @@ export function main() {
 		return;
 	}
 
+	// Check if the comment is on a pull request
+	const issue = github.context.payload.issue;
+	if (!issue || !issue.pull_request) {
+		core.info("Comment is not on a pull request, exiting");
+		return;
+	}
+
 	const commentBody = github.context.payload.comment.body;
 	const parseResult = RewordedMessage.parse(commentBody);
 

@@ -31270,6 +31270,13 @@ function main() {
 		return;
 	}
 
+	// Check if the comment is on a pull request
+	const issue = githubExports.context.payload.issue;
+	if (!issue || !issue.pull_request) {
+		coreExports.info("Comment is not on a pull request, exiting");
+		return;
+	}
+
 	const commentBody = githubExports.context.payload.comment.body;
 	const parseResult = RewordedMessage.parse(commentBody);
 
