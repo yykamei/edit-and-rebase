@@ -32825,7 +32825,9 @@ async function main() {
 		return;
 	}
 
-	const parseResult = RewordedMessage.parse(githubExports.context.payload.comment.body);
+	const parseResult = RewordedMessage.parse(
+		githubExports.context.payload.comment.body,
+	);
 
 	if (!parseResult.success) {
 		coreExports.info(parseResult.error);

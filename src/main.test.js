@@ -7,10 +7,13 @@ import { createOAuthDeviceAuth as importedCreateOAuthDeviceAuth } from "@octokit
 // Helper to mock github.context
 function setGitHubContext(eventName, commentBody, isPullRequest = true) {
 	github.context.eventName = eventName;
-	const issue = isPullRequest ? { pull_request: {}, number: 123 } : { number: 1 };
+	const issue = isPullRequest
+		? { pull_request: {}, number: 123 }
+		: { number: 1 };
 	github.context.payload = {
 		issue,
-		comment: commentBody !== undefined ? { id: 8834, body: commentBody } : undefined,
+		comment:
+			commentBody !== undefined ? { id: 8834, body: commentBody } : undefined,
 	};
 }
 
@@ -38,7 +41,9 @@ describe("main", () => {
 		setGitHubContext("issue_comment", "hello world", false);
 		const infoSpy = vi.spyOn(core, "info");
 		main();
-		expect(infoSpy).toHaveBeenCalledWith("Comment is not on a pull request, exiting");
+		expect(infoSpy).toHaveBeenCalledWith(
+			"Comment is not on a pull request, exiting",
+		);
 	});
 
 	it("exits if comment does not start with .rebase", () => {
@@ -53,7 +58,9 @@ describe("main", () => {
 		const infoSpy = vi.spyOn(core, "info");
 		vi.spyOn(core, "getInput").mockReturnValue("dummy-token");
 		const updateCommentMock = vi.fn();
-		vi.spyOn(github, "getOctokit").mockReturnValue({ issues: { updateComment: updateCommentMock } });
+		vi.spyOn(github, "getOctokit").mockReturnValue({
+			issues: { updateComment: updateCommentMock },
+		});
 
 		const verification = {
 			verification_uri: "https://github.com/login/device",

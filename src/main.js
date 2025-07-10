@@ -16,7 +16,9 @@ export async function main() {
 		return;
 	}
 
-	const parseResult = RewordedMessage.parse(github.context.payload.comment.body);
+	const parseResult = RewordedMessage.parse(
+		github.context.payload.comment.body,
+	);
 
 	if (!parseResult.success) {
 		core.info(parseResult.error);
