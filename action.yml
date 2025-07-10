@@ -2,6 +2,11 @@ name: Edit and Rebase
 description: |
   GitHub Action that lets developers edit the commit messages,
   squash them into a single commit, and rebase it on top of the default branch.
+inputs:
+  github-token:
+    description: The GitHub token used to create an authenticated client
+    required: false
+    default: ${{ github.token }}
 
 runs:
   using: node20
