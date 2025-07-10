@@ -40,7 +40,6 @@ export async function main() {
 			octokit.rest.issues.updateComment({
 				owner: github.context.repo.owner,
 				repo: github.context.repo.repo,
-				issue_number: issue.number,
 				comment_id: github.context.payload.comment.id,
 				body: `Please authenticate: ${verification.verification_uri} and enter code: ${verification.user_code}
 

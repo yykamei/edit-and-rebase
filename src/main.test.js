@@ -81,7 +81,6 @@ describe("main", () => {
 		expect(updateCommentMock).toHaveBeenCalledWith({
 			owner: "dummy-owner",
 			repo: "dummy-repo",
-			issue_number: 123,
 			comment_id: 8834,
 			body: expect.stringContaining(verification.verification_uri),
 		});
