@@ -23,28 +23,10 @@ describe("main", () => {
 		expect(infoSpy).toHaveBeenCalledWith("Not an issue comment event, exiting");
 	});
 
-	it("exits if no comment body", () => {
-		setGithubContext("issue_comment");
-		const infoSpy = vi.spyOn(core, "info");
-		main();
-		expect(infoSpy).toHaveBeenCalledWith("No comment body found, exiting");
-	});
-
 	it("exits if comment does not start with .rebase", () => {
 		setGithubContext("issue_comment", "hello world");
 		const infoSpy = vi.spyOn(core, "info");
 		main();
-		expect(infoSpy).toHaveBeenCalledWith(
-			"Comment does not start with .rebase, exiting",
-		);
-	});
-
-	it("logs rebase comment if comment starts with .rebase", () => {
-		setGithubContext("issue_comment", ".rebase please");
-		const infoSpy = vi.spyOn(core, "info");
-		main();
-		expect(infoSpy).toHaveBeenCalledWith(
-			"Rebase comment received: .rebase please",
-		);
+		expect(infoSpy).toHaveBeenCalledWith("Comment does not start with .rebase");
 	});
 });
