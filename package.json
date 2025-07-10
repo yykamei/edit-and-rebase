@@ -15,7 +15,8 @@
 	"type": "module",
 	"dependencies": {
 		"@actions/core": "^1.11.1",
-		"@actions/github": "^6.0.1"
+		"@actions/github": "^6.0.1",
+		"@octokit/auth-oauth-device": "^8.0.1"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.1.1",

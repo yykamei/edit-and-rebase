@@ -1,8 +1,9 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 import { RewordedMessage } from "./RewordedMessage";
+import { createOAuthDeviceAuth } from "@octokit/auth-oauth-device";
 
-export function main() {
+export async function main() {
 	if (github.context.eventName !== "issue_comment") {
 		core.info("Not an issue comment event, exiting");
 		return;
@@ -15,8 +16,7 @@ export function main() {
 		return;
 	}
 
-	const commentBody = github.context.payload.comment.body;
-	const parseResult = RewordedMessage.parse(commentBody);
+	const parseResult = RewordedMessage.parse(github.context.payload.comment.body);
 
 	if (!parseResult.success) {
 		core.info(parseResult.error);
@@ -26,4 +26,31 @@ export function main() {
 	const rewordedMessage = parseResult.message;
 	core.info(`Parsed subject: ${rewordedMessage.subject}`);
 	core.info(`Parsed body: ${rewordedMessage.body}`);
+
+	// OAuth device authentication
+	const auth = createOAuthDeviceAuth({
+		clientType: "oauth-app",
+		clientId: "Ov23li8HIIAlRguBeB0e",
+		scopes: ["repo"],
+		onVerification(verification) {
+			// Post a comment to the PR with verification URI and user code
+			const octokit = github.getOctokit(core.getInput("github-token"));
+			octokit.issues.updateComment({
+				owner: github.context.repo.owner,
+				repo: github.context.repo.repo,
+				issue_number: issue.number,
+				comment_id: github.context.payload.comment.id,
+				body: `Please authenticate: ${verification.verification_uri} and enter code: ${verification.user_code}
+
+<details>
+<summary>Original message</summary>
+${github.context.payload.comment.body}
+</details>
+`,
+			});
+		},
+	});
+
+	const { token } = await auth({ type: "oauth" });
+	core.info(`OAuth token acquired: ${token ? "yes" : "no"}`);
 }
