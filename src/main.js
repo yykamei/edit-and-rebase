@@ -37,11 +37,17 @@ export async function main() {
 		onVerification(verification) {
 			// Post a comment to the PR with verification URI and user code
 			const octokit = github.getOctokit(core.getInput("github-token"));
-			octokit.rest.issues.createComment({
+			octokit.rest.issues.updateComment({
 				owner: github.context.repo.owner,
 				repo: github.context.repo.repo,
-				issue_number: issue.number,
-				body: `Please authenticate: ${verification.verification_uri} and enter code: ${verification.user_code}`,
+				comment_id: github.context.payload.comment.id,
+				body: `Please authenticate: ${verification.verification_uri} and enter code: ${verification.user_code}
+
+<details>
+<summary>Original message</summary>
+${github.context.payload.comment.body}
+</details>
+`,
 			});
 		},
 	});

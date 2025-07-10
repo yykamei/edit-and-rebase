@@ -57,10 +57,10 @@ describe("main", () => {
 		setGitHubContext("issue_comment", ".rebase subject\n\nbody");
 		const infoSpy = vi.spyOn(core, "info");
 		vi.spyOn(core, "getInput").mockReturnValue("dummy-token");
-		const createCommentMock = vi.fn();
+		const updateCommentMock = vi.fn();
 		vi.spyOn(github, "getOctokit").mockReturnValue({
 			rest: {
-				issues: { createComment: createCommentMock },
+				issues: { updateComment: updateCommentMock },
 			},
 		});
 
@@ -78,10 +78,10 @@ describe("main", () => {
 		});
 
 		await main();
-		expect(createCommentMock).toHaveBeenCalledWith({
+		expect(updateCommentMock).toHaveBeenCalledWith({
 			owner: "dummy-owner",
 			repo: "dummy-repo",
-			issue_number: 123,
+			comment_id: 8834,
 			body: expect.stringContaining(verification.verification_uri),
 		});
 		expect(infoSpy).toHaveBeenCalledWith("OAuth token acquired: yes");
