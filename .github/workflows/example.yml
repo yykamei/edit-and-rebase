@@ -2,7 +2,8 @@ on:
   issue_comment:
     types: [created, edited]
 
-permissions: write-all
+permissions:
+  pull-requests: write
 
 jobs:
   example_job:
