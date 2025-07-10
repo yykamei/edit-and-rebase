@@ -31234,36 +31234,6 @@ function requireGithub () {
 
 var githubExports = requireGithub();
 
-class RewordedMessage {
-	constructor(subject, body) {
-		this.subject = subject;
-		this.body = body;
-	}
-
-	static parse(input) {
-		if (!input.startsWith(".rebase")) {
-			return { success: false, error: "Comment does not start with .rebase" };
-		}
-
-		const lines = input.split("\n");
-		const subject = lines[0].replace(/^\.rebase\s+/, "").trim();
-
-		if (lines.length === 2) {
-			return {
-				success: false,
-				error: "A blank line is needed between subject and body",
-			};
-		}
-
-		const body = lines.length > 1 ? lines.slice(2).join("\n").trim() : "";
-
-		return {
-			success: true,
-			message: new RewordedMessage(subject, body),
-		};
-	}
-}
-
 function getUserAgent$1() {
   if (typeof navigator === "object" && "userAgent" in navigator) {
     return navigator.userAgent;
@@ -32812,6 +32782,36 @@ function createOAuthDeviceAuth(options) {
   });
 }
 
+class RewordedMessage {
+	constructor(subject, body) {
+		this.subject = subject;
+		this.body = body;
+	}
+
+	static parse(input) {
+		if (!input.startsWith(".rebase")) {
+			return { success: false, error: "Comment does not start with .rebase" };
+		}
+
+		const lines = input.split("\n");
+		const subject = lines[0].replace(/^\.rebase\s+/, "").trim();
+
+		if (lines.length === 2) {
+			return {
+				success: false,
+				error: "A blank line is needed between subject and body",
+			};
+		}
+
+		const body = lines.length > 1 ? lines.slice(2).join("\n").trim() : "";
+
+		return {
+			success: true,
+			message: new RewordedMessage(subject, body),
+		};
+	}
+}
+
 async function main() {
 	if (githubExports.context.eventName !== "issue_comment") {
 		coreExports.info("Not an issue comment event, exiting");
@@ -32846,7 +32846,7 @@ async function main() {
 		onVerification(verification) {
 			// Post a comment to the PR with verification URI and user code
 			const octokit = githubExports.getOctokit(coreExports.getInput("github-token"));
-			octokit.issues.updateComment({
+			octokit.rest.issues.updateComment({
 				owner: githubExports.context.repo.owner,
 				repo: githubExports.context.repo.repo,
 				issue_number: issue.number,

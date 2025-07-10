@@ -1,7 +1,7 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import { RewordedMessage } from "./RewordedMessage";
 import { createOAuthDeviceAuth } from "@octokit/auth-oauth-device";
+import { RewordedMessage } from "./RewordedMessage";
 
 export async function main() {
 	if (github.context.eventName !== "issue_comment") {
@@ -37,7 +37,7 @@ export async function main() {
 		onVerification(verification) {
 			// Post a comment to the PR with verification URI and user code
 			const octokit = github.getOctokit(core.getInput("github-token"));
-			octokit.issues.updateComment({
+			octokit.rest.issues.updateComment({
 				owner: github.context.repo.owner,
 				repo: github.context.repo.repo,
 				issue_number: issue.number,

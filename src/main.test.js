@@ -1,8 +1,8 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
+import { createOAuthDeviceAuth as importedCreateOAuthDeviceAuth } from "@octokit/auth-oauth-device";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { main } from "./main";
-import { createOAuthDeviceAuth as importedCreateOAuthDeviceAuth } from "@octokit/auth-oauth-device";
 
 // Helper to mock github.context
 function setGitHubContext(eventName, commentBody, isPullRequest = true) {
@@ -59,7 +59,9 @@ describe("main", () => {
 		vi.spyOn(core, "getInput").mockReturnValue("dummy-token");
 		const updateCommentMock = vi.fn();
 		vi.spyOn(github, "getOctokit").mockReturnValue({
-			issues: { updateComment: updateCommentMock },
+			rest: {
+				issues: { updateComment: updateCommentMock },
+			},
 		});
 
 		const verification = {
