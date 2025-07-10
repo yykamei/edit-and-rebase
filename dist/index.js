@@ -31234,30 +31234,53 @@ function requireGithub () {
 
 var githubExports = requireGithub();
 
+class RewordedMessage {
+	constructor(subject, body) {
+		this.subject = subject;
+		this.body = body;
+	}
+
+	static parse(input) {
+		if (!input.startsWith(".rebase")) {
+			return { success: false, error: "Comment does not start with .rebase" };
+		}
+
+		const lines = input.split("\n");
+		const subject = lines[0].replace(/^\.rebase\s+/, "").trim();
+
+		if (lines.length === 2) {
+			return {
+				success: false,
+				error: "A blank line is needed between subject and body",
+			};
+		}
+
+		const body = lines.length > 1 ? lines.slice(2).join("\n").trim() : "";
+
+		return {
+			success: true,
+			message: new RewordedMessage(subject, body),
+		};
+	}
+}
+
 function main() {
-	// Check if this is an issue comment event
 	if (githubExports.context.eventName !== "issue_comment") {
 		coreExports.info("Not an issue comment event, exiting");
 		return;
 	}
 
-	// Get the comment body from the payload
-	const comment = githubExports.context.payload.comment;
-	if (!comment || !comment.body) {
-		coreExports.info("No comment body found, exiting");
+	const commentBody = githubExports.context.payload.comment.body;
+	const parseResult = RewordedMessage.parse(commentBody);
+
+	if (!parseResult.success) {
+		coreExports.info(parseResult.error);
 		return;
 	}
 
-	const commentBody = comment.body;
-
-	// Check if comment starts with .rebase
-	if (!commentBody.startsWith(".rebase")) {
-		coreExports.info("Comment does not start with .rebase, exiting");
-		return;
-	}
-
-	// Log the whole comment
-	coreExports.info(`Rebase comment received: ${commentBody}`);
+	const rewordedMessage = parseResult.message;
+	coreExports.info(`Parsed subject: ${rewordedMessage.subject}`);
+	coreExports.info(`Parsed body: ${rewordedMessage.body}`);
 }
 
 try {
